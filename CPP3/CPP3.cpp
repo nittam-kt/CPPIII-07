@@ -38,9 +38,9 @@ struct VertexType
 
 // 三角形を作るため、頂点を３つ作る
 VertexType v[3] = {
-    {{-0.5,-0.5,0}},
-    {{-0.5,0.5,0}},
-    {{0.5,-0.5,0}}
+    {{-0.5,-0.5,1}},
+    {{-0.5,0.5,1}},
+    {{0.5,-0.5,1}}
 };
 
 // このコード モジュールに含まれる関数の宣言
@@ -52,34 +52,6 @@ INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 void Update();
 void Render();
 void RenderUI();
-
-class Enemy
-{
-    float x;
-    float y;
-    virtual void update() {}
-};
-
-
-class Player
-{
-public:
-    int hp;
-
-    Player() : hp(10) {}
-};
-
-
-void Damage(Player player, int damage)
-{
-    player.hp -= damage;
-}
-
-
-std::wstring PlayerString(const Player& player)
-{
-    return std::to_wstring(player.hp);
-}
 
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -165,6 +137,30 @@ void Update()
         v[1].Pos.x += 0.01f;
         v[2].Pos.x += 0.01f;
     }
+    if(Input::GetKey(Keyboard::W))
+    {
+        v[0].Pos.y += 0.01f;
+        v[1].Pos.y += 0.01f;
+        v[2].Pos.y += 0.01f;
+    }
+    if(Input::GetKey(Keyboard::S))
+    {
+        v[0].Pos.y -= 0.01f;
+        v[1].Pos.y -= 0.01f;
+        v[2].Pos.y -= 0.01f;
+    }
+    if(Input::GetKey(Keyboard::Up))
+    {
+        v[0].Pos.z += 0.01f;
+        v[1].Pos.z += 0.01f;
+        v[2].Pos.z += 0.01f;
+    }
+    if(Input::GetKey(Keyboard::Down))
+    {
+        v[0].Pos.z -= 0.01f;
+        v[1].Pos.z -= 0.01f;
+        v[2].Pos.z -= 0.01f;
+    }
 }
 
 
@@ -193,7 +189,7 @@ void Render()
     // 描画実行
     //-----------------------------
     // デバイスコンテキスト、上記のセットした内容で描画する
-//    D3DManager::getInstance()->GetContext()->Draw(3, 0);
+    D3DManager::getInstance()->GetContext()->Draw(3, 0);
 }
 
 
@@ -203,7 +199,7 @@ void RenderUI()
     // 文字の描画
     g_spriteBatch->Begin();
 
-    std::wstring str1 = std::to_wstring(1);
+    std::wstring str1 = std::to_wstring(v[0].Pos.z);
     std::wstring str2 = std::to_wstring(2);
 
     g_spriteFont->DrawString(g_spriteBatch.get(),
